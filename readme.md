@@ -1,6 +1,6 @@
 # Helicopter
 
-A browser-based geography game for school studies. Fly a small top-down helicopter over a real map and find the requested place before moving on to the next mission.
+A browser-based geography game for elementary school studies (for kids). Fly a small top-down helicopter over a real map and find the requested place before moving on to the next mission.
 
 The game currently asks the player to find countries, oceans/seas, cities, lakes, mountain ranges, peninsulas, and deserts. Target names are shown in Finnish and English.
 

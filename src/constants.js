@@ -1,22 +1,29 @@
-export const FPS = 60;
-
 export const TILE_SIZE = 256;
-export const ZOOM      = 5;
+export const ZOOM      = 4;
 
-export const STADIA_MAPS_API_KEY = import.meta.env?.VITE_STADIA_MAPS_API_KEY ?? '';
-export const TILE_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png';
-export const TILE_ATTRIBUTION = '© Stadia Maps © OpenMapTiles © OpenStreetMap';
-export const TILE_PROVIDER_NAME = 'Stadia Maps';
+export const MAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
 export const COUNTRY_BOUNDARIES_URL = 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_0_countries.geojson';
 
 export const START_LAT = 25.0;
 export const START_LON = 10.0;
 
-export const ACCELERATION = 0.35;
-export const FRICTION     = 0.88;
-export const MAX_SPEED    = 8.0;
+export const GAME_DURATION_S = 40;
+export const WARNING_S = 10;
+export const FIND_TIME_BONUSES_S = [8, 7, 6];
+export const MIN_FIND_TIME_BONUS_S = 5;
+export const TIMER_WARNING_COLOR = '#ff3b30';
+export const FOUND_BANNER_S = 1.2;
+export const ARRIVAL_RADIUS = 12;
+export const LEADERBOARD_SIZE = 6;
+export const LEADERBOARD_KEY = 'helicopter.leaderboard';
 
-export const WORLD_PX  = (1 << ZOOM) * TILE_SIZE;   // 8192
+export const DESKTOP_ACCELERATION = 0.22;
+export const TOUCH_ACCELERATION = 0.48;
+export const FRICTION     = 0.88;
+export const DESKTOP_MAX_SPEED = 4.9;
+export const TOUCH_MAX_SPEED = 10.8;
+
+export const WORLD_PX  = (1 << ZOOM) * TILE_SIZE;
 export const KM_PER_PX = 40075.0 / WORLD_PX;
 
 export const REVEAL_RADIUS = {
@@ -55,5 +62,4 @@ export const DARK_GREEN         = '#196e19';
 export const GREEN              = '#3cbe3c';
 export const ROTOR_CLR          = '#373737';
 export const DARK_GRAY          = '#464646';
-export const TILE_LOADING_COLOR = '#d2d2d2';
 export const COUNTRY_BORDER_WIDTH = 4;

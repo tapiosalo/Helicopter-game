@@ -1,7 +1,5 @@
 import {
   FOUND_COLOR,
-  STADIA_MAPS_API_KEY,
-  TILE_ATTRIBUTION,
 } from './constants.js';
 import { placeNameFi } from './placeLabels.js';
 import { fontSize } from './renderUtils.js';
@@ -47,38 +45,4 @@ export function drawFoundBanner(ctx, foundPlace) {
   ctx.fillText(textFi, bx + 14, by + 36);
   ctx.font = `${fontSize(W, 20)} monospace`;
   ctx.fillText(textEn, bx + 14, by + 60);
-}
-
-export function drawMapAttribution(ctx) {
-  const W = ctx.canvas.width;
-  const H = ctx.canvas.height;
-
-  ctx.font = `${fontSize(W, 12)} monospace`;
-  const tw = ctx.measureText(TILE_ATTRIBUTION).width;
-  const x = W - tw - 10;
-  const y = H - 10;
-
-  ctx.fillStyle = 'rgba(255,255,255,0.82)';
-  ctx.fillRect(x - 4, y - 14, tw + 8, 18);
-  ctx.fillStyle = '#222';
-  ctx.fillText(TILE_ATTRIBUTION, x, y);
-}
-
-export function drawTileProviderNotice(ctx, status, errorMessage = null) {
-  if (status === 'ready') return;
-
-  const W = ctx.canvas.width;
-  const message = errorMessage
-    ?? (STADIA_MAPS_API_KEY
-      ? 'Loading Stadia Maps tiles...'
-      : 'Loading Stadia Maps tiles; add VITE_STADIA_MAPS_API_KEY for deployed use');
-
-  ctx.font = `bold ${fontSize(W, 16)} monospace`;
-  const tw = ctx.measureText(message).width;
-  const x = W / 2 - tw / 2;
-
-  ctx.fillStyle = 'rgba(0,0,0,0.72)';
-  ctx.fillRect(x - 8, 84, tw + 16, 30);
-  ctx.fillStyle = '#fff';
-  ctx.fillText(message, x, 105);
 }

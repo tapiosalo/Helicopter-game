@@ -1,7 +1,22 @@
 import {
-  ACCELERATION, FRICTION, MAX_SPEED,
+  ARRIVAL_RADIUS,
+  DESKTOP_ACCELERATION,
+  DESKTOP_MAX_SPEED,
+  FRICTION,
+  TOUCH_ACCELERATION,
+  TOUCH_MAX_SPEED,
   DARK_GREEN, GREEN, ROTOR_CLR, DARK_GRAY,
 } from './constants.js';
+import { wrappedDx } from './geo.js';
+
+function hasKeyboardInput(keys) {
+  return Boolean(
+    keys['w'] || keys['ArrowUp']
+    || keys['s'] || keys['ArrowDown']
+    || keys['a'] || keys['ArrowLeft']
+    || keys['d'] || keys['ArrowRight'],
+  );
+}
 
 export class Player {
   constructor(worldX, worldY) {
@@ -11,6 +26,11 @@ export class Player {
     this.vy         = 0;
     this.angle      = 0;        // degrees, 0 = facing up, clockwise positive
     this.rotorAngle = 0;
+    this.moveTarget = null;
+  }
+
+  setMoveTarget(worldX, worldY) {
+    this.moveTarget = { worldX, worldY };
   }
 
   /**
@@ -19,26 +39,45 @@ export class Player {
    */
   update(keys, touchDir = null) {
     let ax = 0, ay = 0;
-    if (touchDir !== null) {
+    let maxSpeed = DESKTOP_MAX_SPEED;
+
+    if (hasKeyboardInput(keys)) {
+      this.moveTarget = null;
+
+      if (keys['w'] || keys['ArrowUp'])    ay -= DESKTOP_ACCELERATION;
+      if (keys['s'] || keys['ArrowDown'])  ay += DESKTOP_ACCELERATION;
+      if (keys['a'] || keys['ArrowLeft'])  ax -= DESKTOP_ACCELERATION;
+      if (keys['d'] || keys['ArrowRight']) ax += DESKTOP_ACCELERATION;
+    } else if (this.moveTarget !== null) {
+      const dx = wrappedDx(this.worldX, this.moveTarget.worldX);
+      const dy = this.moveTarget.worldY - this.worldY;
+      const dist = Math.hypot(dx, dy);
+      const speed = Math.hypot(this.vx, this.vy);
+
+      if (dist <= ARRIVAL_RADIUS && speed < 0.5) {
+        this.moveTarget = null;
+        this.vx = 0;
+        this.vy = 0;
+      } else if (dist > 0) {
+        ax = (dx / dist) * DESKTOP_ACCELERATION;
+        ay = (dy / dist) * DESKTOP_ACCELERATION;
+      }
+    } else if (touchDir !== null) {
+      maxSpeed = TOUCH_MAX_SPEED;
       // Steer toward touch point; ignore if finger is within dead-zone
       const dist = Math.hypot(touchDir.dx, touchDir.dy);
       if (dist > 30) {
-        ax = (touchDir.dx / dist) * ACCELERATION;
-        ay = (touchDir.dy / dist) * ACCELERATION;
+        ax = (touchDir.dx / dist) * TOUCH_ACCELERATION;
+        ay = (touchDir.dy / dist) * TOUCH_ACCELERATION;
       }
-    } else {
-      if (keys['w'] || keys['ArrowUp'])    ay -= ACCELERATION;
-      if (keys['s'] || keys['ArrowDown'])  ay += ACCELERATION;
-      if (keys['a'] || keys['ArrowLeft'])  ax -= ACCELERATION;
-      if (keys['d'] || keys['ArrowRight']) ax += ACCELERATION;
     }
 
     this.vx = (this.vx + ax) * FRICTION;
     this.vy = (this.vy + ay) * FRICTION;
 
     const speed = Math.hypot(this.vx, this.vy);
-    if (speed > MAX_SPEED) {
-      const s = MAX_SPEED / speed;
+    if (speed > maxSpeed) {
+      const s = maxSpeed / speed;
       this.vx *= s;
       this.vy *= s;
     }

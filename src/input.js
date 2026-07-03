@@ -43,3 +43,18 @@ export function bindTouchControls(canvas, touchRef) {
     canvas.removeEventListener('touchcancel', clearTouch);
   };
 }
+
+export function bindMouseControls(canvas, mouseRef) {
+  const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+  if (coarsePointer) return () => {};
+
+  const setMouse = (e) => {
+    mouseRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  canvas.addEventListener('mousedown', setMouse);
+
+  return () => {
+    canvas.removeEventListener('mousedown', setMouse);
+  };
+}
